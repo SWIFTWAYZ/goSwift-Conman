@@ -10,3 +10,5 @@ var promisedFunc = blueBird.promisify(function(){
 promisedFunc();
 
  console.log('server  running');
+
+  console.log('server  running......');
