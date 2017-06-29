@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="css/style_2.css">
+    <link rel="stylesheet" type="text/css" href="css/menu.css">
+    <style type="text/css">
+      html { height: 100% }
+      body { height: 100%; margin: 10px; padding: 0 }
+      #map-canvas { height: 100% }
+
+    #wrapper {
+        position: relative;
+        display: inline-block;
+    }
+    #mapBox {
+        width: 400px;
+        height: 400px;
+    }
+    #marker {
+        position: absolute;
+        top: calc(50% - 10px);
+        left: calc(50% - 10px);
+        height: 10px;
+        width: 10px;
+        border: 3px solid blue;
+        border-radius: 50%;
+        background-color: rgba(30,144,255,0.5);
+        box-sizing: border-box;
+        pointer-events: none;
+      }
+    </style>
+    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDJb-BgevVvxlcYMP97OrmRhXq_7D_qOQo">
+    </script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function () {
+        /*var center = new google.maps.LatLng(-26.10863, 28.058750);
+        
+        var map = new google.maps.Map(document.getElementById('mapBox'), {
+            zoom: 12,
+            center: center,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+
+        google.maps.event.addListener(map, 'drag', function() {
+          //loc(map);
+        });
+
+        google.maps.event.addListener(map, 'dragend', function () {
+          loc(map);
+        });
+
+        function loc(map) {
+            var x = map.getCenter();
+            console.log("current location = " + x);
+            document.getElementById('dragStatus').innerHTML = x.lat().toFixed(6) + ', ' + x.lng().toFixed(6);
+        }*/
+    });
+    </script>
+</head>
+<body ng-app="swiftApp">
+<div id="map-canvas"/>
+<div id="wrapper">
+    <div id="mapBox" ></div>
+    <div id="marker"></div>
+</div>
+    <div id="newDiv">
+        <div ui-view></div>
+</div>
+<div id="dragStatus"></div>
+<!---->
+
+</body>
+    <script type="text/javascript" src="lib/angular.js"></script>
+    <script type="text/javascript" src="lib/angular-route.js"></script>
+    <script type="text/javascript" src="lib/angular-ui-router.js"></script>
+
+    <script type="text/javascript" src="app.js"></script>
+    <!--<script type="text/javascript" src="/controller/UserCtrl.js"></script>-->
+    <script type="text/javascript" src="/controller/LocationCtrl.js"></script>
+</html>
