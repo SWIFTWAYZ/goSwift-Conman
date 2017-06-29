@@ -1,0 +1,51 @@
+<!--kkk	
+<div id="mapDiv">
+   		<div id="map"></div>
+   		<div id="centerMarker"><img src="/img/map_pin_stroke.png"/></div>
+	</div>
+-->
+	<div id="regDiv">
+	<form type="submit" id="registerForm" ng-submit="updateLocation()">
+		<button type="submit">Request Trip</button>
+		<br>
+		<span>Time:</span><span id="datetime" size="35" ng-model="time"> {{datetime}}</span>
+		<br>
+		<span>GPS:</span> <p><span id="latitude" placeholder="e.g."> {{gdata.gps_latlng}}</span>
+		</p>
+		<br>
+		<span>Address:</span><input type="text" size="35" ng-model="address"/>
+		<br>
+		<span>Firstname:</span><input type="text" size="35" ng-model="firstname"/>
+		<br>
+		<span>Mobile:</span><input type="text" size="12" ng-model="mobile"/>
+		<br>
+		<span>Landmark:</span><input type="text" placeholder="e.g." ng-model="landmark">
+		<br>
+		<span>Geo-address:</span><p><span id="address" ng-model="geo_address" style="display:inline-block;min-height: 30px"> {{address}}</span></p>
+	</form>
+	</div>
+
+	<div id="locationDiv">
+		<table>
+			<thead> 
+					<tr ng-if="list_length > 0">
+						<th>Last seen</th>
+						<th>Time</th>
+						<th>Distance</th>
+						<th>ETA</th>
+						<th>Location seen</th>
+					</tr>
+			</thead>
+			<tbody>
+				<tr ng-if="location != undefined" ng-repeat="location in vehiclelocation">
+					<td>{{location.locationTime}}</td>
+					<td>{{location.locationGPS}}</td>
+					<td>12km</td>
+					<td>00h45<td>
+					<td>{{location.locationAdress}}</td>
+					<td><button ng-click="getDriver(location._id)">see map</button></td>
+				</tr>
+				
+			</tbody>
+		</table>
+	</div>
