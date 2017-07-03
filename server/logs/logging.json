@@ -13,8 +13,8 @@
 
     "appender": {             // the filter's appender, smtp
       "type": "smtp",
-      "recipients": "tinyiko@mavoni.co.za",
-      "sender": "nodemailer@mavoni.co.za",
+      "recipients": "tinykov@gmail.com",
+      "sender": "tinykov@gmail.com",
       "sendInterval": 60,     // Batch log messages, and send via 
                               // this interval in seconds (0 sends 
                               // immediately, unbatched).

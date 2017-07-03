@@ -13,7 +13,6 @@
 		RiderLocationSchema,
 		RiderLocations;
 
-
 	var mongoose = require("mongoose");
 	var config = require("../config/index");
 

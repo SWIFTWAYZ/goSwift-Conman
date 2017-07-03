@@ -101,6 +101,23 @@ exports.getDistanceAndTimeOfArrival = function(request,response){
 }
 
 
+var updateVehicleLocation = function(lat,lon){
+	console.log("calling updateVehicleLocation = "+ lat+","+lon);
+	GLOBAL.client_channel.request({
+            serviceName: "server",
+            timeout: 1000
+    }).send('function1',lat,lon,onResponse);
+
+    function onResponse(err,response,arg2,arg3){
+        if(err){
+            console.log("function1 error ->" + err);
+            //finish(err); not defined, crashes application 
+        }
+        else{
+            console.log(":Client->function1 response ->"+ response + "from server-"+String(arg3))
+        }
+    }
+}
 /**
  * Method used to update customer info in table Customers,
  * also calls updateCustomerLocation()
@@ -108,12 +125,13 @@ exports.getDistanceAndTimeOfArrival = function(request,response){
  * @param response
  */
 exports.updatelocation = function(request, response){
+	updateVehicleLocation(request.body.latitude,request.body.longitude); //calling TChannel function
+
 	//console.log("calling http:updatelocation-----lat:" + request.params.lat +"lon="+request.params.lon);
 	console.log("calling http:updatelocation");
 	console.log(request.body);
 	var Customer,CustomerLocation;
-
-
+	
 	//if(mongoose.models.Customers){
 		var Customer = SwiftDbProvider.Customers;//mongoose.model("Customers");
 		if(false){
@@ -141,7 +159,7 @@ exports.updatelocation = function(request, response){
  * @param request
  * @param response
  */
-var updateVehicleLocation = function(request,response){
+var updateVehicleLocationXXXX = function(request,response){
 	//need to fix this section to update correct id
 
 }
