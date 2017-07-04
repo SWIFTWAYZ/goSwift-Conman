@@ -100,12 +100,16 @@ exports.getDistanceAndTimeOfArrival = function(request,response){
     }).limit(15);
 }
 
-
+/**
+* Method that calls DISPATCH through a TChannel RPC call 
+* @lat, latitude of vehicle GPS position
+* @lon, longitude of vehicle GPS position
+*/
 var updateVehicleLocation = function(lat,lon){
-	console.log("calling updateVehicleLocation = "+ lat+","+lon);
+	console.log("CONMAN:-> calling updateVehicleLocation = "+ lat+","+lon);
 	GLOBAL.client_channel.request({
             serviceName: "server",
-            timeout: 1000
+            timeout: 2000
     }).send('function1',lat,lon,onResponse);
 
     function onResponse(err,response,arg2,arg3){
@@ -114,7 +118,8 @@ var updateVehicleLocation = function(lat,lon){
             //finish(err); not defined, crashes application 
         }
         else{
-            console.log(":Client->function1 response ->"+ response + "from server-"+String(arg3))
+        	//response.json({"result_id":"0"});
+            console.log(":Client->function1 response ->"+ response + "from server-"+arg3.toString())
         }
     }
 }
@@ -127,11 +132,12 @@ var updateVehicleLocation = function(lat,lon){
 exports.updatelocation = function(request, response){
 	updateVehicleLocation(request.body.latitude,request.body.longitude); //calling TChannel function
 
-	//console.log("calling http:updatelocation-----lat:" + request.params.lat +"lon="+request.params.lon);
-	console.log("calling http:updatelocation");
+	console.log("called goSwift-dispatch updateVehicleLocation-----lat:" + request.params.lat +"lon="+request.params.lon);
+	//console.log("calling http:updatelocation");
 	console.log(request.body);
 	var Customer,CustomerLocation;
 	
+	/*
 	//if(mongoose.models.Customers){
 		var Customer = SwiftDbProvider.Customers;//mongoose.model("Customers");
 		if(false){
@@ -149,7 +155,7 @@ exports.updatelocation = function(request, response){
 				updateCustomerLocation(request, response,result._id);
 			}
 		});
-	}
+	}*/
 	//}
 };
 

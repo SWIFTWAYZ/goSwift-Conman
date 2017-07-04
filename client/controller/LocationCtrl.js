@@ -28,6 +28,12 @@ angular.module("SwiftControllers")
 		 * geolocation API
 		 */
 		function initialize() {
+
+			var marker = new google.maps.Marker({
+				position: {lat: -26.00091519,lng: 28.0012282},
+				map: map,
+				draggable: true
+			});
 			console.log("Initializing map");
 
 			var mapCanvas = document.getElementById('mapBox');
@@ -48,6 +54,8 @@ angular.module("SwiftControllers")
         	google.maps.event.addListener(map, 'dragend', function () {
           		loc(map);
         	});
+
+        	/*
 			var options = null;
 			var browserChrome = /chrome/i.test( navigator.userAgent );
 			if (navigator.geolocation) {
@@ -63,12 +71,34 @@ angular.module("SwiftControllers")
 				}
 			} else {
 				$scope.address = "Your browser does not support geolocation";
-			}
+			}*/
 
 			function loc(map) {
-	            var x = map.getCenter();
+	            /*var x = map.getCenter();
 	            console.log("current location = " + x);
-	            document.getElementById('dragStatus').innerHTML = x.lat().toFixed(6) + ', ' + x.lng().toFixed(6);
+	            document.getElementById('dragStatus').innerHTML = x.lat().toFixed(6) + ', ' + x.lng().toFixed(6);*/
+	            var center = map.getCenter();
+	            lat = center.lat().toFixed(6);
+	            lng = center.lng().toFixed(6);
+
+	            window.setTimeout(function() {
+					//map.panTo(marker.getPosition;
+
+					marker.setPosition(map.getCenter());
+					
+
+					getAddress(center,function(error,results){
+						console.log("Google Map Address = " + results + " : new center----" + center);
+						$scope.$apply(function(){
+							$scope.address = results;
+							$scope.gdata = {latitude: center.lat().toFixed(6),
+											longitude: center.lng().toFixed(6),
+											gps_latlng: center.lat().toFixed(6) + "," + center.lng().toFixed(6)
+							};
+
+						});
+					});
+				}, 0);
         	}
 			//getVehicleLocation(orderid);
 		}
@@ -103,33 +133,6 @@ angular.module("SwiftControllers")
 
 
 		/**
-		 * Method used to retrieve vehicle location using orderNumber
-		 * @param orderid
-		 */
-		function getVehicleLocation(orderid){
-			//retrieve location of delivery vehicles with a given order
-			var lat = "24.4555";
-			var lon = "-34.7655";
-			$http.get("/vehiclelocation/"+orderid).success(function(response){
-
-				if(response){
-					$scope.list_length = response.length;
-					$scope.vehiclelocation = response;
-					console.log(response);
-					/*console.log("----" + $scope.vehiclelocation[0].locationTime + " ----" +
-						$scope.vehiclelocation[0].locationGPS);
-					console.log("----" + $scope.vehiclelocation[0].locationAdress + " ----" +
-						$scope.vehiclelocation[0].driverId);*/
-
-
-				}
-				else{
-					console.log("no response from getVehicleLocation : " + response.status);
-				}
-			})
-		}
-
-		/**
 		 * Method used to update location of customer
 		 */
 		function updateLocation(){
@@ -151,7 +154,7 @@ angular.module("SwiftControllers")
 
 			});
 
-			getVehicleLocation(orderid);
+			//getVehicleLocation(orderid);
 
 		}
 
@@ -234,7 +237,7 @@ angular.module("SwiftControllers")
 			});*/
 
 			//markerCoords(marker);
-
+			/*
 			map.addListener('dragend', function() {
 				window.setTimeout(function() {
 					//map.panTo(marker.getPosition;
@@ -254,7 +257,7 @@ angular.module("SwiftControllers")
 						});
 					});
 				}, 0);
-			});
+			});*/
 		}
 
 		/**
