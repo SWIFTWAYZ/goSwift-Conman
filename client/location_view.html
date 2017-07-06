@@ -24,7 +24,10 @@
 		<span>Geo-address</span><p><span id="address" ng-model="geo_address" style="display:inline-block;min-height: 30px"> {{address}}</span></p>
 	</form>
 	</div>
-
+	<div id="driverDiv">
+	<form type="submit" id="driverForm" ng-submit="logDriverPosition()">
+	<button type="submit">Log position</button>
+	</div>
 	<div id="locationDiv">
 		<table>
 			<thead> 

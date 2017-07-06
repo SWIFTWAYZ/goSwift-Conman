@@ -21,6 +21,7 @@ angular.module("SwiftControllers")
 
 
 		$scope.updateLocation = updateLocation;
+		$scope.logDriverPosition = logDriverPosition;
 
 			//------------------------initialize()---------------------------
 		/**
@@ -131,7 +132,21 @@ angular.module("SwiftControllers")
 			});
 		}
 
-
+		/**
+		* log the GPS position of driver
+		*/
+		function logDriverPosition(vehicle_id){
+			vehicle_id = "5578";
+			console.log("logDriverPositino ...." + lat + ","+lng+","+vehicle_id);
+			var driverposition = {
+				latitude: lat,
+				longitude: lng,
+				vehicle_id: vehicle_id
+			};
+			$http.post("/getvehiclesnear/"+vehicle_id,driverposition).success(function(response){
+				console.log(response);
+			})
+		}
 		/**
 		 * Method used to update location of customer
 		 */
@@ -150,6 +165,7 @@ angular.module("SwiftControllers")
 			};
 
 			$http.post("/updatelocation/"+orderid, locationdata).success(function(response){
+				console.log("response from goSwift-conman:"+JSON.stringify(response));
 				console.log("/updatelocation http-response: " + response.status);
 
 			});

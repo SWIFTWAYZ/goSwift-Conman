@@ -12,6 +12,7 @@ service tripService {
 
 	oneway void updateDriverLocation(
 	1: double lat,
-	2: double lon);
+	2: double lon,
+	3: string vehicle_id);
 }
 

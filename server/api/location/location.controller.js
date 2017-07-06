@@ -34,11 +34,12 @@ var client = global.client_channel;
 * @lat, latitude of vehicle GPS position
 * @lon, longitude of vehicle GPS position
 */
-var updateVehicleLocation = function(lat,lon){
+var updateVehicleLocation = function(lat,lon,cb){
 	/*----------------------TChannel Thrift request ---------------*/
 		console.log("CONMAN:-> calling updateVehicleLocation = "+ lat+","+lon);
 		tchannelThrift.request({
 	        serviceName: 't-server',
+	        timeout: 2000,
 	        headers: {
 	            cn: 'echo'
 	        }
@@ -56,6 +57,7 @@ var updateVehicleLocation = function(lat,lon){
 	            console.log('got error', err);
 	        } else {
 	            console.log('got resp', resp);
+	            cb(resp);
 	        }
 
 	        //server.close();
@@ -64,7 +66,7 @@ var updateVehicleLocation = function(lat,lon){
 /*----------------------TChannel Raw request ---------------*/
 	global.client_channel.request({
             serviceName: "server",
-            timeout: 2000
+            timeout: 3000
     }).send('function1',lat,lon,onResponse);
 
     function onResponse(err,response,arg2,arg3){
@@ -85,13 +87,26 @@ var updateVehicleLocation = function(lat,lon){
  * @param response
  */
 exports.updatelocation = function(request, response){
-	updateVehicleLocation(request.body.latitude,request.body.longitude); //calling TChannel function
+	updateVehicleLocation(request.body.latitude,request.body.longitude,function(results){
+		response.json(results);
+	}); //calling TChannel function
 
-	console.log("called goSwift-dispatch updateVehicleLocation-----lat:" + request.params.lat +"lon="+request.params.lon);
-	//console.log("calling http:updatelocation");
+	console.log("goSwift-dispatch updateVehicleLocation--lat:" + 
+		request.params.lat +"lon="+request.params.lon);
+	
 	console.log(request.body);
 	var Customer,CustomerLocation;
-	
-	
+
 };
 
+/**
+* used to log driver position to dispatch
+* @param request
+* @param response
+*/
+exports.logDriverPosition = function(request,response){
+	var req_body = request.body;
+	console.log(JSON.stringify(request.body));
+	console.log(request.body.latitude +","+request.body.longitude +"-"+ request.body.vehicle_id);
+	response.json("201");
+}
