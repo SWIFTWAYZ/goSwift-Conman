@@ -1,19 +1,17 @@
 var express 	= require("express");
 var Tchannel = require("tchannel");
+var TChannelThrift = require("tchannel/as/thrift");
 var mongoose = require("mongoose");
 var smpp = require("./smppService");
 var path = require('path');
 var logger = require("./config/logutil");
 var config = require("./config/index");
-var SwiftDbProvider = require("./model/swiftdb_scheme").SwiftDbProvider;
 
-
-//var Schema = mongoose.Schema;
 var app = express();
 require("./routes")(app);
 var t_client = new Tchannel();
 
-GLOBAL.client_channel = t_client.makeSubChannel({
+global.client_channel = t_client.makeSubChannel({
         serviceName: 'server',
         peers: ['127.0.0.1:4040'],
         requestDefaults: {

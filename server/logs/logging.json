@@ -1,27 +1,28 @@
 {
-  "replaceConsole": true,     // Optional: if true, console.log 
-                              // will be replaced by log4js
+  "replaceConsole": true,    
+                              
   "appenders": [{
-  "type": "console"         // This appender just sends
-                              // everything to the console.
-  }, {
-    "type": "logLevelFilter", // This is a recursive appender,
-                              // filters log messages and
-                              // sends them to its own appender.
-
-    "level": "ERROR",         // Include only error logs.
-
-    "appender": {             // the filter's appender, smtp
+  "type": "console"                            
+  }, 
+  {
+    "type": "logLevelFilter",          
+    "level": "ERROR",         
+    "appender": {             
       "type": "smtp",
-      "recipients": "tinykov@gmail.com",
+      "recipients": "tinyiko@mavoni.co.za, tinyiko@zulzi.com",
       "sender": "tinykov@gmail.com",
-      "sendInterval": 60,     // Batch log messages, and send via 
-                              // this interval in seconds (0 sends 
-                              // immediately, unbatched).
+      "subject": "nodemailer: error occured",
+      "sendInterval": 60,      
+                               
+                              
       "transport": "SMTP",
       "SMTP": {
-        "host": "localhost",  // Other SMTP options here.
-        "port": 25
+        "host": "smtp.gmail.com",
+        "port": 25,
+        "secureConnection":false,
+        "tls": {
+        "rejectUnauthorized": false
+        }
       }
     }
   }]

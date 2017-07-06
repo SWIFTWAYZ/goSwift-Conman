@@ -5,11 +5,8 @@ var config = require("./config/index");
 var express 	= require("express");
 //var logger = require("./config/logger");
 var logger = require("./config/logutil");
-var usercontroller = require('./api/user/user.controller');
 var locationcontroller = require('./api/location/location.controller');
-var drivercontroller = require('./api/driver/driver.controller');
-//var deliveriescontroller = require('./api/deliveries/deliveries.controller');
-//var retailercontroller = require('./api/retailer/retailer.controller.js');
+
 var router = express.Router();
 
 module.exports = function(app){
@@ -28,23 +25,8 @@ app.route('/*')
       res.sendFile(config.root + 'client/');
     });
 //app.use("/",express.static(__dirname +'/public'));
-app.route("/userlist").get(usercontroller.index);
-app.route("/createuser").post(usercontroller.create);
-app.route("/deletebyid/:id").delete(usercontroller.deleteById);
-app.route("/userbyid/:id").get(usercontroller.retrieveById);
 
-app.route("/vehiclelocation/:orderid").get(locationcontroller.getLocationByOrderNum);
 app.route("/updatelocation/:orderid").post(locationcontroller.updatelocation);
-app.route("/updatedriverlocation").post(locationcontroller.updateDriverLocation)
-
-app.route("/registerdriver").post(drivercontroller.updateDriver);
-app.route("/driverlist").get(drivercontroller.getDrivers);
-app.route("/deletedriver/:id").delete(drivercontroller.deleteById);
-app.route("/driverbyid/:id").get(drivercontroller.getDriverById)
-    //app.route("/deliveries").get(deliveriescontroller.getDrivers);
-
-
-//console.log(router.stack);
 
 };
 
