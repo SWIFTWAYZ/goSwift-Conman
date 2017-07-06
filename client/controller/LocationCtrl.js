@@ -20,7 +20,7 @@ angular.module("SwiftControllers")
 		var map;
 
 
-		$scope.updateLocation = updateLocation;
+		$scope.getVehiclesNear = getVehiclesNear;
 		$scope.logDriverPosition = logDriverPosition;
 
 			//------------------------initialize()---------------------------
@@ -143,14 +143,14 @@ angular.module("SwiftControllers")
 				longitude: lng,
 				vehicle_id: vehicle_id
 			};
-			$http.post("/getvehiclesnear/"+vehicle_id,driverposition).success(function(response){
+			$http.post("/updatelocation/"+vehicle_id,driverposition).success(function(response){
 				console.log(response);
 			})
 		}
 		/**
 		 * Method used to update location of customer
 		 */
-		function updateLocation(){
+		function getVehiclesNear(){
 			var orderid = "ZUL004";
 			console.log("updateLocation trigger :");
 			console.log($scope.address + "," + lat + "," + lng);
@@ -164,7 +164,7 @@ angular.module("SwiftControllers")
 				mobile: $scope.mobile
 			};
 
-			$http.post("/updatelocation/"+orderid, locationdata).success(function(response){
+			$http.post("/getvehiclesnear/"+orderid, locationdata).success(function(response){
 				console.log("response from goSwift-conman:"+JSON.stringify(response));
 				console.log("/updatelocation http-response: " + response.status);
 
