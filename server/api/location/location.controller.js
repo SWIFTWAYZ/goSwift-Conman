@@ -52,14 +52,12 @@ var updateVehicleLocation = function(lat,lon,cb){
 
 	    function onResponse2(err, resp) {
 	    	console.log("CONMAN:-> fired thrift onResponse2");
-
 	        if (err) {
 	            console.log('got error', err);
 	        } else {
 	            console.log('got resp', resp);
 	            cb(resp);
 	        }
-
 	        //server.close();
 	    }
 
@@ -72,10 +70,8 @@ var updateVehicleLocation = function(lat,lon,cb){
     function onResponse(err,response,arg2,arg3){
         if(err){
             console.log("function1 error ->" + err);
-            //finish(err); not defined, crashes application 
         }
         else{
-        	//response.json({"result_id":"0"});
             console.log(":Client->function1 response ->"+ response + "from server-"+arg3.toString())
         }
     }
