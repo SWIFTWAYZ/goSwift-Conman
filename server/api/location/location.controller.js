@@ -55,26 +55,12 @@ var updateVehicleLocation = function(lat,lon,cb){
 	        if (err) {
 	            console.log('got error', err);
 	        } else {
-	            console.log('got resp', resp);
+	            console.log('vehicles near, size =', resp.body.length);
 	            cb(resp);
 	        }
 	        //server.close();
 	    }
 
-/*----------------------TChannel Raw request ---------------*/
-	global.client_channel.request({
-            serviceName: "server",
-            timeout: 3000
-    }).send('function1',lat,lon,onResponse);
-
-    function onResponse(err,response,arg2,arg3){
-        if(err){
-            console.log("function1 error ->" + err);
-        }
-        else{
-            console.log(":Client->function1 response ->"+ response + "from server-"+arg3.toString())
-        }
-    }
 }
 /**
  * Method used to update customer info in table Customers,
