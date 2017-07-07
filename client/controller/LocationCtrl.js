@@ -23,7 +23,7 @@ angular.module("SwiftControllers")
 		$scope.getVehiclesNear = getVehiclesNear;
 		$scope.logDriverPosition = logDriverPosition;
 
-			//------------------------initialize()---------------------------
+		//------------------------initialize()---------------------------
 		/**
 		 * Method used to initialize google map and getCurrentLocation using the
 		 * geolocation API

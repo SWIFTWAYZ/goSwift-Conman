@@ -108,5 +108,26 @@ exports.logDriverPosition = function(request,response){
 	var req_body = request.body;
 	console.log(JSON.stringify(request.body));
 	console.log(request.body.latitude +","+request.body.longitude +"-"+ request.body.vehicle_id);
-	response.json("201");
+	tchannelThrift.request({
+		serviceName:"t-server",
+		timeout:2000,
+		headers: {
+			cn:"echo"
+		}
+	}).send("tripService::updateDriverLocation",{headers:"driverLocHeaders"},
+	{
+		lat:parseFloat(request.body.latitude),
+		lon: parseFloat(request.body.longitude),
+		vehicle_id: request.body.vehicle_id
+	},onResponse);
+
+	function onResponse(err,resp){
+			  if (err) {
+	            console.log('got error', err);
+	        } else {
+	            console.log('got resp', resp);
+	            response.json(resp);
+	        }
+	}
+	//response.json("201");
 }
