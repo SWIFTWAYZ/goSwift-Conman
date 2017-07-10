@@ -39,7 +39,7 @@ var updateVehicleLocation = function(lat,lon,cb){
 		console.log("CONMAN:-> calling updateVehicleLocation = "+ lat+","+lon);
 		tchannelThrift.request({
 	        serviceName: 't-server',
-	        timeout: 2000,
+	        timeout: 3000,
 	        headers: {
 	            cn: 'echo'
 	        }
@@ -92,7 +92,7 @@ exports.logDriverPosition = function(request,response){
 	console.log(request.body.latitude +","+request.body.longitude +"-"+ request.body.vehicle_id);
 	tchannelThrift.request({
 		serviceName:"t-server",
-		timeout:2000,
+		timeout:3000,
 		headers: {
 			cn:"echo"
 		}
@@ -107,7 +107,7 @@ exports.logDriverPosition = function(request,response){
 			  if (err) {
 	            console.log('got error', err);
 	        } else {
-	            console.log('got resp', resp);
+	            console.log('got resp...', resp);
 	            response.json(resp);
 	        }
 	}

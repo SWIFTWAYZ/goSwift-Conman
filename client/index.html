@@ -13,62 +13,76 @@
         position: relative;
         display: inline-block;
     }
+
+    #over_map2 { 
+        position: absolute; 
+        top: 20px; 
+        left: 20px; 
+        z-index: 99999; 
+    }
+
+#over_map {
+  position: absolute;
+  top: 5px;
+  left: 10%;
+  z-index: 99999;
+  background-color: #fff;
+  padding: 1px;
+  border: 1px solid #999;
+  text-align: center;
+  font-family: 'Roboto','sans-serif';
+  line-height: 30px;
+  padding-left: 5px;
+}
+
     #mapBox {
-        width: 400px;
-        height: 400px;
+        width: 300px;
+        height: 300px;
     }
     #marker {
         position: absolute;
-        top: calc(50% - 10px);
-        left: calc(50% - 10px);
-        height: 10px;
-        width: 10px;
+        top: calc(50% - 12px);
+        left: calc(50% - 12px);
+        height: 12px;
+        width: 12px;
         border: 3px solid blue;
         border-radius: 50%;
-        background-color: rgba(30,144,255,0.5);
+        background-color: #DC143C;
         box-sizing: border-box;
         pointer-events: none;
       }
     </style>
-    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDJb-BgevVvxlcYMP97OrmRhXq_7D_qOQo">
+    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDJb-BgevVvxlcYMP97OrmRhXq_7D_qOQo&libraries=places">
     </script>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    <script type="text/javascript">
-    $(document).ready(function () {
-        /*var center = new google.maps.LatLng(-26.10863, 28.058750);
-        
-        var map = new google.maps.Map(document.getElementById('mapBox'), {
-            zoom: 12,
-            center: center,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        });
-
-        google.maps.event.addListener(map, 'drag', function() {
-          //loc(map);
-        });
-
-        google.maps.event.addListener(map, 'dragend', function () {
-          loc(map);
-        });
-
-        function loc(map) {
-            var x = map.getCenter();
-            console.log("current location = " + x);
-            document.getElementById('dragStatus').innerHTML = x.lat().toFixed(6) + ', ' + x.lng().toFixed(6);
-        }*/
-    });
-    </script>
 </head>
 <body ng-app="swiftApp">
 <div id="map-canvas"/>
 <div id="wrapper">
     <div id="mapBox" ></div>
     <div id="marker"></div>
+    
+    
+        <input id="searchInput" class="controls" type="text" placeholder="Where to?" size="20" 
+        ng-keypress="keyPressFunc($event)" onclick="this.select()" ng-model="mobile"/>
+       <!--
+       <div id="over_map">
+    </div>-->
 </div>
     <div id="newDiv">
         <div ui-view></div>
 </div>
+<div>
+<ul id="geoData">
+    <li>Full Address: <span id="location"></span></li>
+    <li>Postal Code: <span id="postal_code"></span></li>
+    <li>Country: <span id="country"></span></li>
+    <li>Latitude: <span id="lat"></span></li>
+    <li>Longitude: <span id="lon"></span></li>
+</ul>
+</div>
 <div id="dragStatus"></div>
+<!--background-color: rgba(30,144,255,0.5);-->
 <!---->
 
 </body>

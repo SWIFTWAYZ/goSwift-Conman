@@ -4,30 +4,27 @@
    		<div id="centerMarker"><img src="/img/map_pin_stroke.png"/></div>
 	</div>
 -->
+	
 	<div id="regDiv">
+	<button ng-click="logDriverPosition()">Add location</button>
 	<form type="submit" id="registerForm" ng-submit="getVehiclesNear()">
 		<button type="submit">Request Trip</button>
 		<br>
-		<span>Time</span><span id="datetime" size="35" ng-model="time"> {{datetime}}</span>
+		<!--<span>Time</span><span id="datetime" size="35" ng-model="time"> {{datetime}}</span><br>-->
+		<label>GPS</label><input type="text" ng-model="gdata.gps_latlng"/>
 		<br>
-		<span>GPS</span> <p><span id="latitude" placeholder="e.g."> {{gdata.gps_latlng}}</span>
-		</p>
+		<label>Address</label><textarea type="text" cols="35" rows ="2" ng-model="address"/>
 		<br>
-		<span>Address</span><input type="text" size="35" ng-model="address"/>
+		<!--<span>Firstname</span><input type="text" size="35" ng-model="firstname"/>-->
 		<br>
-		<span>Firstname</span><input type="text" size="35" ng-model="firstname"/>
+		<label>Mobile</label><input type="text" size="12" ng-keypress="keyPressFunc($event)" ng-model="mobile"/>
 		<br>
-		<span>Mobile</span><input type="text" size="12" ng-model="mobile"/>
-		<br>
-		<span>Landmark</span><input type="text" placeholder="e.g." ng-model="landmark">
-		<br>
-		<span>Geo-address</span><p><span id="address" ng-model="geo_address" style="display:inline-block;min-height: 30px"> {{address}}</span></p>
+		<!--
+		<span>Geo-address</span><p><span id="address" ng-model="geo_address" style="display:inline-block;min-height: 30px"> {{address}}</span></p>-->
 	</form>
+	
 	</div>
-	<div id="driverDiv">
-	<form type="submit" id="driverForm" ng-submit="logDriverPosition()">
-	<button type="submit">Log position</button>
-	</div>
+	
 	<div id="locationDiv">
 		<table>
 			<thead> 

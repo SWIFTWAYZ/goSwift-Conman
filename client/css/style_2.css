@@ -10,13 +10,6 @@
 }
 
 
-#regDiv2{
-	display: inline-block;
-	height:100px;
-	width: auto;
-	border: 1px solid #73AD21;
-}
-
 #regDiv span{
 	display: inline-block;
 	float: left;
@@ -42,9 +35,30 @@
 	font-family: "arial";
 	font-size: 13px;
 	width: 400px;
+	border: 1px solid #3687AF;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	padding-left: 5px;
 	/*height: auto;*/
-
 }
+
+label {
+ clear: both;
+ float: left;
+ width: 40%;
+}
+
+input {
+ float: left;
+ width: 55%;
+}
+
+ textarea{
+ 	float: left;
+ 	font-family: "arial";
+ 	font-size: 11px;
+ 	width: 55%;
+ }
 
 #driverDiv {
 	color:#009999;
