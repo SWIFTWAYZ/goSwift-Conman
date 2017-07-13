@@ -12,7 +12,7 @@ var thrift_client = TChannel();
 
 var thrift_channel = thrift_client.makeSubChannel({
         serviceName: 't-server',
-        peers: ['127.0.0.1:4041'],
+        peers: ['127.0.0.1:4040'],
         requestDefaults: {
             hasNoParent: true,
             headers: {
@@ -39,7 +39,7 @@ var updateVehicleLocation = function(lat,lon,cb){
 		console.log("CONMAN:-> calling updateVehicleLocation = "+ lat+","+lon);
 		tchannelThrift.request({
 	        serviceName: 't-server',
-	        timeout: 3000,
+	        timeout: 4500,
 	        headers: {
 	            cn: 'echo'
 	        }
@@ -88,6 +88,7 @@ exports.updatelocation = function(request, response){
 */
 exports.logDriverPosition = function(request,response){
 	var req_body = request.body;
+	console.log("request=="+request);
 	console.log(JSON.stringify(request.body));
 	console.log(request.body.latitude +","+request.body.longitude +"-"+ request.body.vehicle_id);
 	tchannelThrift.request({
@@ -107,9 +108,8 @@ exports.logDriverPosition = function(request,response){
 			  if (err) {
 	            console.log('got error', err);
 	        } else {
-	            console.log('got resp...', resp);
+	            //console.log('got resp...', resp);
 	            response.json(resp);
 	        }
 	}
-	//response.json("201");
 }

@@ -10,19 +10,29 @@
 	<form type="submit" id="registerForm" ng-submit="getVehiclesNear()">
 		<button type="submit">Request Trip</button>
 		<br>
+		<br>
 		<!--<span>Time</span><span id="datetime" size="35" ng-model="time"> {{datetime}}</span><br>-->
-		<label>GPS</label><input type="text" ng-model="gdata.gps_latlng"/>
+		<label>GPS</label><input id="gps" type="text" ng-model="gdata.gps_latlng"/>
 		<br>
 		<label>Address</label><textarea type="text" cols="35" rows ="2" ng-model="address"/>
 		<br>
 		<!--<span>Firstname</span><input type="text" size="35" ng-model="firstname"/>-->
 		<br>
-		<label>Mobile</label><input type="text" size="12" ng-keypress="keyPressFunc($event)" ng-model="mobile"/>
+		<label>Cell_id</label><input type="text" size="12" ng-keypress="keyPressFunc($event)" ng-model="mobile"/>
 		<br>
 		<!--
 		<span>Geo-address</span><p><span id="address" ng-model="geo_address" style="display:inline-block;min-height: 30px"> {{address}}</span></p>-->
 	</form>
-	
+	<div>
+	<br>
+<div id="geoData">
+    <label>Destination: </label><textarea id="location"></textarea>
+    <!--label>Postal Code: </label><span id="postal_code"></span-->
+    <label>Country: </label><span id="country"></span>
+    <label>Latitude: </label><span id="lat"></span>
+    <label>Longitude: </label><span id="lon"></span>
+</div>
+</div>
 	</div>
 	
 	<div id="locationDiv">

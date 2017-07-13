@@ -81,31 +81,43 @@ header ul {
     z-index: 999;
     position: relative;
 }
+/*--------------------mapbox-----------------*/
+#wrapper {
+        position: relative;
+        display: inline-block;
+    }
 
-#map {
-	width: 100%;
-	margin-top: 10px;
-	height: 250px;
-	width: 700px;
-	margin: auto;
-	display: table;
-	position: absolute;
-	border: 1px solid #FF4014;
-	z-index: 2;
-}
+    #over_map {
+      position: absolute;
+      top: 5px;
+      left: 60%;
+      z-index: 99999;
+      background-color: #fff;
+      padding: 1px;
+      border: 1px solid #9999;
+      text-align: center;
+      font-family: 'Roboto','sans-serif';
+      line-height: 30px;
+      padding-left: 5px;
+    }
 
-#mapDiv {
-	clear:both;
-	margin-top: 10px;
-	display: flex;
-	align-items: center;  /*align vertical */
-	margin-top: 60px;
-	height: 250px;
-	position: relative;
-
- 	/*border: 1px solid #3687AF;*/
- 	border: 1px solid #FFCC33;
-}
+    #mapBox {
+        width: 500px;
+        height: 300px;
+    }
+    #marker {
+        position: absolute;
+        top: calc(50% - 12px);
+        left: calc(50% - 12px);
+        height: 12px;
+        width: 12px;
+        border: 3px solid blue;
+        border-radius: 50%;
+        background-color: #DC143C;
+        box-sizing: border-box;
+        pointer-events: none;
+      }
+/*--------------------end mapbox-----------------*/
 
 #retailerMap{
 	margin-top: 20px;

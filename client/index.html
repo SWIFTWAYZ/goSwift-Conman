@@ -9,48 +9,7 @@
       body { height: 100%; margin: 10px; padding: 0 }
       #map-canvas { height: 100% }
 
-    #wrapper {
-        position: relative;
-        display: inline-block;
-    }
-
-    #over_map2 { 
-        position: absolute; 
-        top: 20px; 
-        left: 20px; 
-        z-index: 99999; 
-    }
-
-#over_map {
-  position: absolute;
-  top: 5px;
-  left: 10%;
-  z-index: 99999;
-  background-color: #fff;
-  padding: 1px;
-  border: 1px solid #999;
-  text-align: center;
-  font-family: 'Roboto','sans-serif';
-  line-height: 30px;
-  padding-left: 5px;
-}
-
-    #mapBox {
-        width: 300px;
-        height: 300px;
-    }
-    #marker {
-        position: absolute;
-        top: calc(50% - 12px);
-        left: calc(50% - 12px);
-        height: 12px;
-        width: 12px;
-        border: 3px solid blue;
-        border-radius: 50%;
-        background-color: #DC143C;
-        box-sizing: border-box;
-        pointer-events: none;
-      }
+    
     </style>
     <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDJb-BgevVvxlcYMP97OrmRhXq_7D_qOQo&libraries=places">
     </script>
@@ -61,26 +20,22 @@
 <div id="wrapper">
     <div id="mapBox" ></div>
     <div id="marker"></div>
+    <div id="over_map">
+    <input type="text" style="width:90%" placeholder="enter s2 cell?" size="20"></input>
+    <button id="cell" type="submit">locate</button>
+    </div>
     
-    
-        <input id="searchInput" class="controls" type="text" placeholder="Where to?" size="20" 
+        <input id="searchInput" class="controls" type="text" placeholder="Where to?" size="15" 
         ng-keypress="keyPressFunc($event)" onclick="this.select()" ng-model="mobile"/>
        <!--
        <div id="over_map">
     </div>-->
 </div>
-    <div id="newDiv">
+
+<div id="newDiv">
         <div ui-view></div>
 </div>
-<div>
-<ul id="geoData">
-    <li>Full Address: <span id="location"></span></li>
-    <li>Postal Code: <span id="postal_code"></span></li>
-    <li>Country: <span id="country"></span></li>
-    <li>Latitude: <span id="lat"></span></li>
-    <li>Longitude: <span id="lon"></span></li>
-</ul>
-</div>
+
 <div id="dragStatus"></div>
 <!--background-color: rgba(30,144,255,0.5);-->
 <!---->

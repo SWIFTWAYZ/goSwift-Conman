@@ -1,7 +1,6 @@
 angular.module("SwiftControllers")
 	.config(['$stateProvider','$urlRouterProvider', function($stateProvider,$urlRouterProvider){
 
-
 		$stateProvider.state('locationview',{
 			url: '/',
 			templateUrl: 'location_view.html', 
@@ -17,11 +16,12 @@ angular.module("SwiftControllers")
 		var lat, lng;
 		var map;
 
+		//var trip[] = null;
+
 		$scope.name = "Tinyiko";
 		$scope.datetime = dt.toUTCString();
 		$scope.getVehiclesNear = getVehiclesNear;
 		$scope.logDriverPosition = logDriverPosition;
-		$scope.highlight = highlight;
 
 		//------------------------initialize()---------------------------
 		/**
@@ -58,6 +58,13 @@ angular.module("SwiftControllers")
           		loc(map);
         	});
 
+        	document.getElementById('cell').addEventListener('click', function() {
+        		console.log("clicked")
+        		//logDriverPosition("5567");
+
+        	});
+
+
 			function loc(map) {
 	            /*var x = map.getCenter();
 	            console.log("current location = " + x);
@@ -86,8 +93,6 @@ angular.module("SwiftControllers")
 				}, 0);
         	}
 
-    /*------------------------------------------*/
-    
 	/*------------------------------------------------*/
 		}
 
@@ -95,8 +100,8 @@ angular.module("SwiftControllers")
 			var input = document.getElementById('searchInput');
 		    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
-		    var autocomplete = new google.maps.places.Autocomplete(input);
-		    autocomplete.bindTo('bounds', map);
+		    var floating_place = new google.maps.places.Autocomplete(input);
+		    floating_place.bindTo('bounds', map);
 
 		    var infowindow = new google.maps.InfoWindow();
 		    var marker = new google.maps.Marker({
@@ -105,10 +110,10 @@ angular.module("SwiftControllers")
 		        	//0, -29)
 		    });
 
-		    autocomplete.addListener('place_changed', function() {
+		    floating_place.addListener('place_changed', function() {
 		        infowindow.close();
 		        marker.setVisible(false);
-		        var place = autocomplete.getPlace();
+		        var place = floating_place.getPlace();
 		        if (!place.geometry) {
 		            window.alert("Autocomplete's returned place contains no geometry");
 		            return;
@@ -150,18 +155,21 @@ angular.module("SwiftControllers")
 		        //Location details
 		        for (var i = 0; i < place.address_components.length; i++) {
 		            if(place.address_components[i].types[0] == 'postal_code'){
-		                document.getElementById('postal_code').innerHTML = place.address_components[i].long_name;
+		            	//console.log(place.address_components[i].long_name);
+		                //document.getElementById('postal_code').innerHTML = place.address_components[i].long_name;
 		            }
 		            if(place.address_components[i].types[0] == 'country'){
 		                document.getElementById('country').innerHTML = place.address_components[i].long_name;
 		            }
 		        }
 		        document.getElementById('location').innerHTML = place.formatted_address;
-		        document.getElementById('lat').innerHTML = place.geometry.location.lat();
-		        document.getElementById('lon').innerHTML = place.geometry.location.lng();
+		        if(place.geometry.location){
+			        document.getElementById('lat').innerHTML = place.geometry.location.lat().toFixed(6);
+			        document.getElementById('lon').innerHTML = place.geometry.location.lng().toFixed(6);
+		    	}
 		    });
 		}
-	
+	/*------------------------------------------*/
 		initialize();
 
 		/*google.maps.event.addDomListener(window, "load", function(){});
@@ -201,9 +209,19 @@ angular.module("SwiftControllers")
 				longitude: lng,
 				vehicle_id: vehicle_id
 			};
-			$http.post("/updatelocation/"+vehicle_id,driverposition).success(function(response){
-				console.log(response);
-			})
+			if(isNaN(lat) && isNaN(lng)){
+				console.log("no location set...");
+				 //document.getElementById('gps').innerHTML = "enter location";
+				 //$scope.gdata.gps_latlng = "no loc";
+				 document.getElementById("gps").style.color = "#FF4500";
+				return;
+			}
+			else{
+				//document.getElementById("latlng").style.color = "#000000";
+				$http.post("/updatelocation/"+vehicle_id,driverposition).success(function(response){
+					console.log(response);
+				})
+			}
 		}
 		/**
 		 * Method used to update location of customer
@@ -318,11 +336,6 @@ angular.module("SwiftControllers")
 			}
 			
 		}
-
-		function highlight(field) {
-    		field.focus();
-    		field.select();
-    	}
 
 		/**
 		 * Method used to geocode GPS latlng to address and format into an address string.
