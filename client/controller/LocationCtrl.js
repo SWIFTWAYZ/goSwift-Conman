@@ -8,66 +8,131 @@ angular.module("SwiftControllers")
 		})
 
 	}])
-	.controller("LocationCtrl", function($scope,$http){
+	.controller("LocationCtrl", function($scope,$http) {
 
-		var orderid = "56a7abe6d566cbdf3a794ee7";
-		var dt = new Date();
-		var dateFormat = "dd/MM/yyyy HH:mm";
-		var lat, lng;
-		var map;
+        var riderid = "56a7abe6d566cbdf3a794ee7";
+        var dt = new Date();
+        var dateFormat = "dd/MM/yyyy HH:mm";
+        var lat, lng;
+        var map;
 
-		//var trip[] = null;
+        //var trip[] = null;
 
-		$scope.name = "Tinyiko";
-		$scope.datetime = dt.toUTCString();
-		$scope.getVehiclesNear = getVehiclesNear;
-		$scope.logDriverPosition = logDriverPosition;
+        $scope.name = "Tinyiko";
+        $scope.datetime = dt.toUTCString();
+        $scope.getVehiclesNear = getVehiclesNear;
+        $scope.logDriverPosition = logDriverPosition;
 
-		//------------------------initialize()---------------------------
-		/**
-		 * Method used to initialize google map and getCurrentLocation using the
-		 * geolocation API
-		 */
-		function initialize() {
+        var directionsDisplay,pos;
+        var directionsService = new google.maps.DirectionsService();
+        var lineSymbol = {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 5,
+            fillColor: 'yellow',
+            fillOpacity: 0.8,
+            strokeColor: '#DC143C'
+        }
 
-			var marker = new google.maps.Marker({
-				position: {lat: -26.00091519,lng: 28.0012282},
-				map: map,
-				draggable: true
-			});
-			console.log("Initializing map");
+        var marker2;
 
-			var mapCanvas = document.getElementById('mapBox');
-			console.log("map----------" + mapCanvas);
-			if (typeof google === 'object' && typeof google.maps === 'object') {
-				var mapOptions = {
-					center: new google.maps.LatLng(-26.061204,28.087798),
-					zoom: 10,
-					mapTypeId: google.maps.MapTypeId.ROADMAP,
-					mapTypeControl: false
-				}
-				map = new google.maps.Map(mapCanvas, mapOptions);
-			}
+        initialize();
 
-			setupAutoComplete(map); //setup AutoComplete
-			google.maps.event.addListener(map, 'drag', function() {
-          		//loc(map);
-        	});
+        //------------------------initialize()---------------------------
+        /**
+         * Method used to initialize google map and getCurrentLocation using the
+         * geolocation API
+         */
+        function initialize() {
 
-        	google.maps.event.addListener(map, 'dragend', function () {
-          		loc(map);
-        	});
+			/*var marker = new google.maps.Marker({
+			 position: {lat: -26.00091519,lng: 28.0012282},
+			 map: map,
+			 draggable: true
+			 });*/
 
-        	document.getElementById('cell').addEventListener('click', function() {
-        		console.log("clicked")
-        		//logDriverPosition("5567");
+            directionsDisplay = new google.maps.DirectionsRenderer({
+                polylineOptions: {
+                    strokeColor: "#DC143C",
+                    strokeWeight: "2",
+                },
+                suppressMarkers: true
+            });
+            // #FF6347
+            console.log("Initializing map");
 
-        	});
+            var mapCanvas = document.getElementById('mapBox');
+            console.log("map----------" + mapCanvas);
+            if (typeof google === 'object' && typeof google.maps === 'object') {
+                var mapOptions = {
+                    center: new google.maps.LatLng(-26.061204, 28.087798),
+                    zoom: 10,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP,
+                    mapTypeControl: false
+                }
+                map = new google.maps.Map(mapCanvas, mapOptions);
+            }
+
+            google.maps.event.addListener(map, 'drag', function () {
+                //loc(map);
+            });
+
+            google.maps.event.addListener(map, 'dragend', function () {
+                loc(map);
+            });
+
+            /**
+             * listen to click event on cell button
+             */
+            document.getElementById('cell').addEventListener('click', function () {
+                console.log("clicked");
+                var start = new google.maps.LatLng(-26.067896, 28.047902);
+                var end = new google.maps.LatLng(-26.154216, 27.992971);
+                calcRoute(start, end);
+            });
+
+            var infoWindow = new google.maps.InfoWindow;
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+
+                    marker2 = new google.maps.Marker({
+                        position: pos,
+                        icon: lineSymbol,
+                        draggable: true,
+                        map: map
+                    });
+
+                    setupAutoComplete(map); //setup AutoComplete
+                    google.maps.event.addListener(marker2, 'dragend', function (drag_event) {
+                        console.log("marker dragged :" + drag_event.latLng);
+                        /*var start_point = {
+                            lat: drag_event.latLng.lat(),
+                            lng: drag_event.latLng.lng()
+                        };*/
+                        var drag_position = new google.maps.LatLng(drag_event.latLng.lat(),
+							drag_event.latLng.lng());
+                        calcRoute(drag_position, pos)
+                        //new google.maps.LatLng(-26.067896,28.047902)
+                        //add code to setup the destination latlng here, map.getCenter()
+                    })
+					/*infoWindow.setPosition(pos);
+					 infoWindow.setContent('Location found.'+pos.lat+","+pos.lng);
+					 infoWindow.open(map);*/
+
+                    map.setCenter(pos);
+                }, function () {
+                    handleLocationError(true, infoWindow, map.getCenter());
+                });
+            }
+
+        }
 
 
-			function loc(map) {
+		function loc(map) {
 	            /*var x = map.getCenter();
-	            console.log("current location = " + x);
 	            document.getElementById('dragStatus').innerHTML = x.lat().toFixed(6) + ', ' + x.lng().toFixed(6);*/
 	            var center = map.getCenter();
 	            lat = center.lat().toFixed(6);
@@ -76,8 +141,7 @@ angular.module("SwiftControllers")
 	            window.setTimeout(function() {
 					//map.panTo(marker.getPosition;
 
-					marker.setPosition(map.getCenter());
-					
+					//marker2.setPosition(center);
 
 					getAddress(center,function(error,results){
 						console.log("Google Map Address = " + results + " : new center----" + center);
@@ -92,111 +156,6 @@ angular.module("SwiftControllers")
 					});
 				}, 0);
         	}
-
-	/*------------------------------------------------*/
-		}
-
-		function setupAutoComplete(map){
-			var input = document.getElementById('searchInput');
-		    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-
-		    var floating_place = new google.maps.places.Autocomplete(input);
-		    floating_place.bindTo('bounds', map);
-
-		    var infowindow = new google.maps.InfoWindow();
-		    var marker = new google.maps.Marker({
-		        map: map,
-		        anchorPoint: new google.maps.Point(-26.061204,28.087798)
-		        	//0, -29)
-		    });
-
-		    floating_place.addListener('place_changed', function() {
-		        infowindow.close();
-		        marker.setVisible(false);
-		        var place = floating_place.getPlace();
-		        if (!place.geometry) {
-		            window.alert("Autocomplete's returned place contains no geometry");
-		            return;
-		        }
-		  
-		        // If the place has a geometry, then present it on a map.
-		        /*if (place.geometry.viewport) {
-		            map.fitBounds(place.geometry.viewport);
-		        } else {
-		            map.setCenter(place.geometry.location);
-		            map.setZoom(11);
-		        }*/
-		        map.setCenter(place.geometry.location);
-		        map.setZoom(13);
-		        marker.setPosition(place.geometry.location);
-		        /*
-		        marker.setIcon(({
-		            url: place.icon,
-		            size: new google.maps.Size(71, 71),
-		            origin: new google.maps.Point(0, 0),
-		            anchor: new google.maps.Point(17, 34),
-		            scaledSize: new google.maps.Size(35, 35)
-		        }));
-		        marker.setPosition(place.geometry.location);
-		        marker.setVisible(true);*/
-		    
-		        var address = '';
-		        if (place.address_components) {
-		            address = [
-		              (place.address_components[0] && place.address_components[0].short_name || ''),
-		              (place.address_components[1] && place.address_components[1].short_name || ''),
-		              (place.address_components[2] && place.address_components[2].short_name || '')
-		            ].join(' ');
-		        }
-		    
-		        infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
-		        //infowindow.open(map, marker);
-		      
-		        //Location details
-		        for (var i = 0; i < place.address_components.length; i++) {
-		            if(place.address_components[i].types[0] == 'postal_code'){
-		            	//console.log(place.address_components[i].long_name);
-		                //document.getElementById('postal_code').innerHTML = place.address_components[i].long_name;
-		            }
-		            if(place.address_components[i].types[0] == 'country'){
-		                document.getElementById('country').innerHTML = place.address_components[i].long_name;
-		            }
-		        }
-		        document.getElementById('location').innerHTML = place.formatted_address;
-		        if(place.geometry.location){
-			        document.getElementById('lat').innerHTML = place.geometry.location.lat().toFixed(6);
-			        document.getElementById('lon').innerHTML = place.geometry.location.lng().toFixed(6);
-		    	}
-		    });
-		}
-	/*------------------------------------------*/
-		initialize();
-
-		/*google.maps.event.addDomListener(window, "load", function(){});
-		 */
-
-		/**
-		 * method listens for dragend event on google map and retrieve LatLng associated
-		 * with event
-		 * @param markerobject
-		 */
-		function markerCoords(markerobject){
-			google.maps.event.addListener(markerobject, 'dragend', function(evt){
-				markerobject.setOptions({
-					position: evt.latLng
-				});
-
-				infoWindow.setOptions({
-					content: '<p>Marker dropped: Current Lat: ' + evt.latLng.lat().toFixed(3) +
-					' Current Lng: ' + evt.latLng.lng().toFixed(3) + '</p>'
-				});
-				console.log("is this center:"+evt.latLng);
-			});
-
-			google.maps.event.addListener(markerobject, 'drag', function(evt){
-				console.log("marker is being dragged");
-			});
-		}
 
 		/**
 		* log the GPS position of driver
@@ -227,7 +186,7 @@ angular.module("SwiftControllers")
 		 * Method used to update location of customer
 		 */
 		function getVehiclesNear(){
-			var orderid = "ZUL004";
+			var riderid = "ZUL004";
 			console.log("updateLocation trigger :");
 			console.log($scope.address + "," + lat + "," + lng);
 
@@ -240,15 +199,77 @@ angular.module("SwiftControllers")
 				mobile: $scope.mobile
 			};
 
-			$http.post("/getvehiclesnear/"+orderid, locationdata).success(function(response){
+			$http.post("/getvehiclesnear/"+riderid, locationdata).success(function(response){
 				console.log("response from goSwift-conman:"+JSON.stringify(response));
-				console.log("/updatelocation http-response: " + response.status);
+				console.log("/updatelocation - response: " + response.status);
 
 			});
-
-			//getVehicleLocation(orderid);
 		}
 
+		function calcRoute(start,end) {
+        //var start = new google.maps.LatLng(-26.067896,28.047902);
+        //var end = new google.maps.LatLng(-26.154216,27.992971);
+        var bounds = new google.maps.LatLngBounds();
+        bounds.extend(start);
+        bounds.extend(end);
+        map.fitBounds(bounds);
+        var request = {
+            origin: start,
+            destination: end,
+            travelMode: google.maps.TravelMode.DRIVING
+        };
+        directionsService.route(request, function (response, status) {
+            if (status == google.maps.DirectionsStatus.OK) {
+                directionsDisplay.setDirections(response);
+                directionsDisplay.setMap(map);
+            } else {
+                console.log("Directions Request from " + start.toUrlValue(6) + " to " + end.toUrlValue(6) 
+                	+ " failed: " + status);
+            }
+
+            var route = response.routes[0];
+            var totalDistance = 0;
+			var totalDuration = 0;
+			var legs = response.routes[0].legs;
+			for(var i=0; i<legs.length; ++i) {
+			    totalDistance += legs[i].distance.value;
+			    totalDuration += legs[i].duration.value;
+			}
+			console.log("route distance = "+totalDistance +"/duration="+totalDuration);
+			$scope.$apply(function(){
+				$scope.mobile = totalDistance + " meters";
+			});
+        });
+    }
+
+
+		/*google.maps.event.addDomListener(window, "load", function(){});
+		 */
+
+		/**
+		 * method listens for dragend event on google map and retrieve LatLng associated
+		 * with event
+		 * @param markerobject
+		 */
+		function markerCoords(markerobject){
+			google.maps.event.addListener(markerobject, 'dragend', function(evt){
+				markerobject.setOptions({
+					position: evt.latLng
+				});
+
+				infoWindow.setOptions({
+					content: '<p>Marker dropped: Current Lat: ' + evt.latLng.lat().toFixed(3) +
+					' Current Lng: ' + evt.latLng.lng().toFixed(3) + '</p>'
+				});
+				console.log("is this center:"+evt.latLng);
+			});
+
+			google.maps.event.addListener(markerobject, 'drag', function(evt){
+				console.log("marker is being dragged");
+			});
+		}
+
+		
 		/**
 		 * callback function invoked when the getCurrentLocation() returns errors
 		 * @param error
@@ -321,21 +342,6 @@ angular.module("SwiftControllers")
 			geocodeLatLng(geocoder,map,infowindow,position.coords);
 		}
 
-		$scope.keyPressFunc = function(keyEvent) {
-			var word = $scope.mobile;
-			console.log("clicked = "+keyEvent);
-			if(word !== null && typeof word !== 'undefined'){
-				console.log("word = " +word);
-				if(word.length > 5){
-					console.log("long = "+word);
-					console.log("gps data = " + $scope.gdata);
-					/*getAddress($scope.gdata,function(results){
-						console.log("address=="+results);
-					}*/
-				}
-			}
-			
-		}
 
 		/**
 		 * Method used to geocode GPS latlng to address and format into an address string.
@@ -414,7 +420,7 @@ angular.module("SwiftControllers")
 							lastname: "anonymous",
 							mobile: "27847849574"
 						};
-						$http.post("/updatelocation/"+orderid, locationdata).then(function(response){
+						$http.post("/updatelocation/"+riderid, locationdata).then(function(response){
 							console.log("/updatelocation http-response: " + response.status);
 
 						});
@@ -427,6 +433,74 @@ angular.module("SwiftControllers")
 			});
 		}
 
-	});
+	/*------------------------------------------------*/
+		function setupAutoComplete(map){
+			var input = document.getElementById('searchInput');
+		    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+		    var floating_place = new google.maps.places.Autocomplete(input);
+		    floating_place.bindTo('bounds', map);
+
+		    var infowindow = new google.maps.InfoWindow();
+		    /*var marker = new google.maps.Marker({
+		        map: map,
+		        anchorPoint: new google.maps.Point(-26.061204,28.087798)
+		        	//0, -29)
+		    });*/
+
+		    floating_place.addListener('place_changed', function() {
+		        infowindow.close();
+		        //marker2.setVisible(false);
+		        var place = floating_place.getPlace();
+		        if (!place.geometry) {
+		            window.alert("Autocomplete's returned place contains no geometry");
+		            return;
+		        }
+		  
+		        //If the place has a geometry, then present it on a map.
+		        /*if (place.geometry.viewport) {
+		            map.fitBounds(place.geometry.viewport);
+		        } else {
+		            map.setCenter(place.geometry.location);
+		            map.setZoom(11);
+		        }*/
+		        //map.setCenter(place.geometry.location);
+		        //map.setZoom(10);
+		        marker2.setPosition(place.geometry.location);
+		        //marker2.setVisible(true);
+		        calcRoute(pos,place.geometry.location);
+		    
+		        var address = '';
+		        if (place.address_components) {
+		            address = [
+		              (place.address_components[0] && place.address_components[0].short_name || ''),
+		              (place.address_components[1] && place.address_components[1].short_name || ''),
+		              (place.address_components[2] && place.address_components[2].short_name || '')
+		            ].join(' ');
+		        }
+		    
+		        infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+		        //infowindow.open(map, marker);
+		      
+		        //Location details
+		        for (var i = 0; i < place.address_components.length; i++) {
+		            if(place.address_components[i].types[0] == 'postal_code'){
+		            	//console.log(place.address_components[i].long_name);
+		                //document.getElementById('postal_code').innerHTML = place.address_components[i].long_name;
+		            }
+		            if(place.address_components[i].types[0] == 'country'){
+		                document.getElementById('country').innerHTML = place.address_components[i].long_name;
+		            }
+		        }
+		        document.getElementById('location').innerHTML = place.formatted_address;
+		        if(place.geometry.location){
+			        document.getElementById('lat').innerHTML = place.geometry.location.lat().toFixed(6);
+			        document.getElementById('lon').innerHTML = place.geometry.location.lng().toFixed(6);
+		    	}
+		    });
+		}
+    })
+
+	/*------------------------------------------*/
 
 
