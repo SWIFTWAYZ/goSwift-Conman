@@ -24,6 +24,7 @@ angular.module("SwiftControllers")
         $scope.logDriverPosition = logDriverPosition;
 
         var directionsDisplay,pos;
+        var current_pos, destination_pos;
         var directionsService = new google.maps.DirectionsService();
         var lineSymbol = {
             path: google.maps.SymbolPath.CIRCLE,
@@ -97,6 +98,8 @@ angular.module("SwiftControllers")
                         lat: position.coords.latitude,
                         lng: position.coords.longitude
                     };
+                current_pos = pos;
+                //console.log("current_pos ===  " +current_pos.lat+","+current_pos.lng);
 
                     marker2 = new google.maps.Marker({
                         position: pos,
@@ -108,6 +111,8 @@ angular.module("SwiftControllers")
                     setupAutoComplete(map); //setup AutoComplete
                     google.maps.event.addListener(marker2, 'dragend', function (drag_event) {
                         console.log("marker dragged :" + drag_event.latLng);
+                        destination_pos = drag_event.latLng;
+                        console.log("destination_pos ===  " +destination_pos);
                         /*var start_point = {
                             lat: drag_event.latLng.lat(),
                             lng: drag_event.latLng.lng()
@@ -115,6 +120,7 @@ angular.module("SwiftControllers")
                         var drag_position = new google.maps.LatLng(drag_event.latLng.lat(),
 							drag_event.latLng.lng());
                         calcRoute(drag_position, pos)
+                        setDestinationGPS(drag_position)
                         //new google.maps.LatLng(-26.067896,28.047902)
                         //add code to setup the destination latlng here, map.getCenter()
                     })
@@ -469,6 +475,7 @@ angular.module("SwiftControllers")
 		        marker2.setPosition(place.geometry.location);
 		        //marker2.setVisible(true);
 		        calcRoute(pos,place.geometry.location);
+		        //add code to update trip_destination and all text inputs
 		    
 		        var address = '';
 		        if (place.address_components) {
@@ -494,12 +501,21 @@ angular.module("SwiftControllers")
 		        }
 		        document.getElementById('location').innerHTML = place.formatted_address;
 		        if(place.geometry.location){
-			        document.getElementById('lat').innerHTML = place.geometry.location.lat().toFixed(6);
-			        document.getElementById('lon').innerHTML = place.geometry.location.lng().toFixed(6);
+			        /*document.getElementById('lat').innerHTML = place.geometry.location.lat().toFixed(6);
+			        document.getElementById('lon').innerHTML = place.geometry.location.lng().toFixed(6);*/
+			        setDestinationGPS(place.geometry.location);
+			        destination_pos = place.geometry.location;
+			        console.log("destination_pos ===  " +destination_pos);
 		    	}
 		    });
 		}
+
+		function setDestinationGPS(latlng){
+            document.getElementById('lat').innerHTML = latlng.lat().toFixed(6);
+            document.getElementById('lon').innerHTML = latlng.lng().toFixed(6);
+        }
     })
+
 
 	/*------------------------------------------*/
 
