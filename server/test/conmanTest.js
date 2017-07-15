@@ -1,4 +1,4 @@
-var loadtest = require('../../loadtest/lib/loadtest.js');
+var loadtest = require('loadtest');
 //var loadtest = require("loadtest.js");
 var vehicle_count = 5589;
 
