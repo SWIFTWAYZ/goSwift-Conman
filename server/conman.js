@@ -4,7 +4,7 @@ var TChannelThrift = require("tchannel/as/thrift");
 var mongoose = require("mongoose");
 var smpp = require("./smppService");
 var path = require('path');
-var logger = require("./config/logutil");
+var logger = require("./config/logutil").logger;
 var config = require("./config/index");
 
 var app = express();
@@ -27,8 +27,8 @@ global.client_channel = t_client.makeSubChannel({
 //------------------------set PORT and listen--------------------------------
 app.set('port', process.env.PORT||3000);
 app.listen(app.get('port'),function(){
-	logger.info("Server listening for connections on port..." + app.get("port"));
-	logger.debug("root directory :" + config.root);
+	logger.log("Server listening for connections on port..." + app.get("port"));
+	logger.log("root directory :" + config.root);
 	
 	//initialize data	
 	app._router.stack.forEach(function(r){

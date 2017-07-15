@@ -1,9 +1,14 @@
 {
   "replaceConsole": true,
 
-  "appenders": [{
-    "type": "console"
-  },
+  "appenders": [
+    {
+      "type": "logLevelFilter",
+      "level": "ERROR",
+      "appender": {
+        "type": "console"
+      }
+    },
     {
       "type": "logLevelFilter",
       "level": "ERROR",
