@@ -9,3 +9,18 @@ Calls to DISPATCH use Thrift serialization over TChannel protocol while method c
 Examples:
 •	When customer request fare estimates, CONMAN will calculate distance estimate of trip and 
 request billing service to estimate the fare and return this to rider
+
+
+NPM PACKAGES
+
+- npm install express
+- npm install http
+- npm install nodemailer
+- npm install thriftrw
+- npm install path
+- npm install tchannel
+- npm install mongoose
+- npm install smpp
+- npm install underscore
+- npm install body-parser
+- npm install winston
