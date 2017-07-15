@@ -1,0 +1,33 @@
+{
+  "replaceConsole": true,    
+                              
+  "appenders": [{
+  "type": "console"         
+                              
+  }, 
+  {
+    "type": "logLevelFilter",          
+    "level": "ERROR",         
+    "appender": {             
+      "type": "smtp",
+      "recipients": "tinyiko@mavoni.co.za, tinykov@gmail.com",
+      "sender": "nodemailer@mavoni.co.za",
+      "subject": "nodemailer: error occured",
+      "sendInterval": 60,      
+                               
+                              
+      "transport": "SMTP",
+      "SMTP": {
+        "host": "mail.mavoni.co.za",
+        "port": 25,
+        "tls": {
+        "rejectUnauthorized": false
+        },
+        "auth":{
+              "user": "info@mavoni.co.za",
+              "pass": "mav0n1" 
+        }
+      }
+    }
+  }]
+}
