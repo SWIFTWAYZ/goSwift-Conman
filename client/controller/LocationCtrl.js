@@ -34,7 +34,24 @@ angular.module("SwiftControllers")
             strokeColor: '#DC143C'
         }
 
+        var vehicleSymbol = {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 2,
+            fillColor: 'orange',
+            fillOpacity: 0.0,
+            strokeColor: '#FF00FF'
+        }
+
+        var riderSymbol = {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 2,
+            fillColor: 'orange',
+            fillOpacity: 0.0,
+            strokeColor: '#000000'
+		}
+
         var marker2;
+        var vehicleMarker;
 
         initialize();
 
@@ -120,7 +137,8 @@ angular.module("SwiftControllers")
                         var drag_position = new google.maps.LatLng(drag_event.latLng.lat(),
 							drag_event.latLng.lng());
                         calcRoute(drag_position, pos)
-                        setDestinationGPS(drag_position)
+                        setDestinationGPS(drag_position);
+
                         //new google.maps.LatLng(-26.067896,28.047902)
                         //add code to setup the destination latlng here, map.getCenter()
                     })
@@ -205,10 +223,42 @@ angular.module("SwiftControllers")
 				mobile: $scope.mobile
 			};
 
-			$http.post("/getvehiclesnear/"+riderid, locationdata).success(function(response){
-				console.log("response from goSwift-conman:"+JSON.stringify(response));
+			$http.post("/getvehiclesnear/"+riderid, locationdata).then(function(response){
+				console.log("response from goSwift-conman:"+JSON.stringify(response.data.body));
 				console.log("/updatelocation - response: " + response.status);
+				var vehicles = response.data.body;
 
+				vehicles.forEach(function(item){
+                    var lat = item.latitude;
+                    var lng = item.longitude;
+                    var vehicle_pos = new google.maps.LatLng(lat,lng);
+
+                    vehicleMarker = new google.maps.Marker({
+                        position: vehicle_pos,
+                        icon: vehicleSymbol,
+                        draggable: true,
+                        map: map
+                    });
+                    //vehicleMarker.setPosition(vehicle_pos);
+				})
+
+               		/* icon: vehicleSymbol,
+                    draggable: true,
+					fillColor: '#AA0000'
+                    */
+				var centerMarker = new google.maps.Marker({
+                    position: map.getCenter(),
+                    icon: riderSymbol,
+                    map: map
+                });
+
+                var circle = new google.maps.Circle({
+                    map: map,
+                    strokeColor: '#000000',
+                    strokeWeight: 1,
+                    radius: 2680,    // 10 miles in metres
+                });
+                circle.bindTo('center', centerMarker, 'position');
 			});
 		}
 
