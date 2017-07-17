@@ -1,7 +1,7 @@
 "use strict";
 
 var mongoose = require("mongoose");
-var logger = require("../../config/logutil");
+var logger = require("../../config/logutil").logger;
 var distance = require("./distance");
 var TChannel = require("tchannel");
 var TChannelThrift = require("tchannel/as/thrift");
@@ -39,7 +39,7 @@ var updateVehicleLocation = function(lat,lon,cb){
 		console.log("CONMAN:-> calling updateVehicleLocation = "+ lat+","+lon);
 		tchannelThrift.request({
 	        serviceName: 't-server',
-	        timeout: 4500,
+	        timeout: 2000,
 	        headers: {
 	            cn: 'echo'
 	        }
@@ -51,11 +51,12 @@ var updateVehicleLocation = function(lat,lon,cb){
 	    }, onResponse2);
 
 	    function onResponse2(err, resp) {
-	    	console.log("CONMAN:-> fired thrift onResponse2");
+	    	logger.log("CONMAN:-> fired thrift onResponse2");
 	        if (err) {
-	            console.log('got error', err);
+	            logger.log('got error', err);
+	            cb(err);
 	        } else {
-	            console.log('vehicles near, size =', resp.body.length);
+	            logger.log('vehicles near, size =', resp.body.length);
 	            cb(resp);
 	        }
 	        //server.close();
@@ -73,10 +74,10 @@ exports.updatelocation = function(request, response){
 		response.json(results);
 	}); //calling TChannel function
 
-	console.log("goSwift-dispatch updateVehicleLocation--lat:" + 
-		request.params.lat +"lon="+request.params.lon);
+	/*logger.log("goSwift-dispatch addVehicleLocation--lat:" +
+        request.body.latitude +"lon="+request.body.latitude);*/
 	
-	console.log(request.body);
+	logger.log(request.body);
 	var Customer,CustomerLocation;
 
 };
@@ -93,7 +94,7 @@ exports.logDriverPosition = function(request,response){
 	console.log(request.body.latitude +","+request.body.longitude +"-"+ request.body.vehicle_id);
 	tchannelThrift.request({
 		serviceName:"t-server",
-		timeout:3000,
+		timeout:2500,
 		headers: {
 			cn:"echo"
 		}
