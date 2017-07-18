@@ -102,8 +102,8 @@ header ul {
     }
 
     #mapBox {
-        width: 500px;
-        height: 300px;
+        width: 600px;
+        height: 500px;
     }
     #marker {
         position: absolute;

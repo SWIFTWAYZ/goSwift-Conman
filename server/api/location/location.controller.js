@@ -34,7 +34,7 @@ var client = global.client_channel;
 * @lat, latitude of vehicle GPS position
 * @lon, longitude of vehicle GPS position
 */
-var updateVehicleLocation = function(lat,lon,cb){
+var addVehicleLocation = function(lat,lon,cb){
 	/*----------------------TChannel Thrift request ---------------*/
 		console.log("CONMAN:-> calling updateVehicleLocation = "+ lat+","+lon);
 		tchannelThrift.request({
@@ -51,18 +51,17 @@ var updateVehicleLocation = function(lat,lon,cb){
 	    }, onResponse2);
 
 	    function onResponse2(err, resp) {
-	    	logger.log("CONMAN:-> fired thrift onResponse2");
+	    	//logger.log("CONMAN:-> fired thrift onResponse2");
 	        if (err) {
 	            logger.log('got error', err);
 	            cb(err);
 	        } else {
-	            logger.log('vehicles near, size =', resp.body.length);
+	            //logger.log('vehicles near, size =', resp.body.length);
 	            cb(resp);
 	        }
-	        //server.close();
 	    }
-
 }
+
 /**
  * Method used to update customer info in table Customers,
  * also calls updateCustomerLocation()
@@ -70,16 +69,12 @@ var updateVehicleLocation = function(lat,lon,cb){
  * @param response
  */
 exports.updatelocation = function(request, response){
-	updateVehicleLocation(request.body.latitude,request.body.longitude,function(results){
+    addVehicleLocation(request.body.latitude,request.body.longitude,function(results){
 		response.json(results);
 	}); //calling TChannel function
 
-	/*logger.log("goSwift-dispatch addVehicleLocation--lat:" +
-        request.body.latitude +"lon="+request.body.latitude);*/
-	
-	logger.log(request.body);
+	//logger.log(request.body);
 	var Customer,CustomerLocation;
-
 };
 
 /**

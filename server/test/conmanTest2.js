@@ -23,7 +23,7 @@ function statusCallback(error, result, latency) {
 var options = {
     url: 'http://localhost:3000/getvehiclesnear/:'+rider_id,
     concurrency: 1,
-    maxRequests: 5,
+    maxRequests: 50,
     method: 'POST',
     contentType: 'application/json',
     headers: {
@@ -32,11 +32,8 @@ var options = {
     requestIndex: 0,// set initial value to use in request body
     requestGenerator: function(params, options, client, callback)
      {
-      // if you want to set random value can use bellow line instead of "user_id": params.requestIndex
-     //"user_id": Math.random().toString(36).substring(7)
      var latlng = randomize(centerPoint,26000,rider_id);
-
-     var id = parseInt(rider_id)+parseInt(params.requestIndex);
+     //var id = parseInt(rider_id)+parseInt(params.requestIndex);
      var body = {
         "latitude": latlng.latitude,
         "longitude": latlng.longitude,
@@ -45,7 +42,6 @@ var options = {
       };
 
     params.requestIndex += 1; // increase the requestIndex  value
-
     var message = JSON.stringify(body);
     options.headers['Content-Length'] = message.length;
     options.headers['Content-Type'] = 'application/json';
@@ -76,10 +72,6 @@ var options = {
         var newlat = y + y0;
         var newlon = x + x0;
         var newlon2 = xp + x0;
-        //" dist=" + (distance(center.latitude, center.longitude, newlat, newlon)/1000).toFixed(2) +"km"
-
-        //console.log(newlat.toFixed(6) + "," + newlon.toFixed(6));
-
         return {
             'latitude': newlat.toFixed(5),
             'longitude': newlon.toFixed(5),
