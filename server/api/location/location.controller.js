@@ -82,8 +82,7 @@ exports.getVehiclesNear = function (request, response) {
  * @param response
  */
 exports.logDriverPosition = function (request, response) {
-    //var req_body = request.body;
-    //logger.log("request==" + request);
+
     //JSON.stringify(request.body)
     logger.log(util.inspect(request.body, {depth: null, colors: true}));
     //logger.log(request.body.latitude + "," + request.body.longitude + "-" + request.body.vehicle_id);
