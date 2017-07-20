@@ -23,7 +23,7 @@ function statusCallback(error, result, latency) {
 var options = {
     url: 'http://localhost:3000/getvehiclesnear/:'+rider_id,
     concurrency: 1,
-    maxRequests: 50,
+    maxRequests: 70,
     method: 'POST',
     contentType: 'application/json',
     headers: {
