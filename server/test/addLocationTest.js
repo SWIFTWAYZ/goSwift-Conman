@@ -84,6 +84,6 @@ loadtest.loadTest(options, function (error, result) {
     }
     else {
         console.log(result);
+        console.log('Tests run successfully');
     }
-    console.log('Tests run successfully');
 });
