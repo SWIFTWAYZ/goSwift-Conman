@@ -25,4 +25,8 @@ var logger = require('tracer').colorConsole(
         }
     });
 
+/*logger.pretty = function(){
+    var prettified = util.inspect(vehicles, {depth: null, colors: true});
+    return prettified;
+}*/
 exports.logger = logger;

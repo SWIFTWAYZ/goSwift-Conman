@@ -26,7 +26,7 @@ app.route('/*')
     });
 //app.use("/",express.static(__dirname +'/public'));
 
-app.route("/getvehiclesnear/:rider_id").post(locationcontroller.updatelocation);
+app.route("/getvehiclesnear/:rider_id").post(locationcontroller.getVehiclesNear);
 app.route("/updatelocation/:vehicle_id").post(locationcontroller.logDriverPosition);
 
 };

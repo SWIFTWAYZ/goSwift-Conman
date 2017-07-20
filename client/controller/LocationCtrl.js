@@ -14,7 +14,8 @@ angular.module("SwiftControllers")
         var lat, lng;
         var map;
         var circleArray = [];
-        var vehicleCircles = [];
+        var allVehicleCircles = [];
+        var riderCircles = [];
 
         $scope.name = "Tinyiko";
         $scope.datetime = dt.toUTCString();
@@ -48,7 +49,7 @@ angular.module("SwiftControllers")
             strokeColor: '#000000'
         }
 
-        var marker2, center;
+        var dragMarker, center;
         var vehicleMarker;
 
         initialize();
@@ -91,6 +92,12 @@ angular.module("SwiftControllers")
                 circleArray.forEach(function (cell) {
                     cell.setMap(null);
                 });
+                allVehicleCircles.forEach(function(vehicle_circle){
+                    vehicle_circle.setMap(null);
+                });
+                riderCircles.forEach(function(rider){
+                    rider.setMap(null);
+                });
             });
 
             var infoWindow = new google.maps.InfoWindow;
@@ -100,16 +107,14 @@ angular.module("SwiftControllers")
                         lat: position.coords.latitude,
                         lng: position.coords.longitude
                     };
-                    //current_pos = pos;
-                    marker2 = new google.maps.Marker({
+                    dragMarker = new google.maps.Marker({
                         position: current_pos,
                         icon: lineSymbol,
                         draggable: true,
                         map: map
                     });
-
                     setupAutoComplete(map); //setup AutoComplete
-                    google.maps.event.addListener(marker2, 'dragend', function (drag_event) {
+                    google.maps.event.addListener(dragMarker, 'dragend', function (drag_event) {
                         console.log("marker dragged :" + drag_event.latLng);
                         destination_pos = drag_event.latLng;
                         console.log("destination_pos ===  " + destination_pos);
@@ -118,7 +123,6 @@ angular.module("SwiftControllers")
                         calcRoute(drag_position, current_pos);
                         setDestinationGPS(drag_position);
                     });
-
                     map.setCenter(pos);
                 }, function () {
                     handleLocationError(true, infoWindow, map.getCenter());
@@ -209,7 +213,7 @@ angular.module("SwiftControllers")
                         draggable: true,
                         map: map
                     });
-                    vehicleCircles.push(vehicleMarker);
+                    allVehicleCircles.push(vehicleMarker);
                 })
 
                 var centerMarker = new google.maps.Marker({
@@ -217,6 +221,7 @@ angular.module("SwiftControllers")
                     icon: riderSymbol,
                     map: map
                 });
+                riderCircles.push(centerMarker);
 
                 var circle = new google.maps.Circle({
                     map: map,
@@ -298,7 +303,7 @@ angular.module("SwiftControllers")
                  }*/
                 //map.setCenter(place.geometry.location);
                 //map.setZoom(10);
-                marker2.setPosition(place.geometry.location);
+                dragMarker.setPosition(place.geometry.location);
                 //marker2.setVisible(true);
                 calcRoute(pos, place.geometry.location);
                 //add code to update trip_destination and all text inputs

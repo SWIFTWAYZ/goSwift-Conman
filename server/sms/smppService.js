@@ -1,7 +1,7 @@
 var smpp   = require('smpp');
 var _      = require("underscore");
 //var logger = require("./config/logger");
-var logger = require("./config/logutil");
+var logger = require("./../config/logutil");
 
 var session = null;
 var credentials = {

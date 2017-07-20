@@ -1,7 +1,7 @@
 "use strict";
 
 var SwiftDbProvider = require("../../model/swiftdb_scheme").SwiftDbProvider;
-var smpp = require("../../smppService");
+var smpp = require("../../sms/smppService");
 var mongoose = require("mongoose");
 var logger = require("../../config/logutil");
 

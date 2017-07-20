@@ -19,7 +19,6 @@ function statusCallback(error, result, latency) {
      console.log('Request loadtest() instance index: ', result.instanceIndex);*/
 }
 
-
 var options = {
     url: 'http://localhost:3000/updatelocation/:' + vehicle_count,
     concurrency: 1,
@@ -29,7 +28,7 @@ var options = {
     headers: {
         "authToken": 'eyJ0eXAiOiJKV1QiLCJhbG'
     },
-    requestIndex: 0,// set initial value to use in request body
+    vehicleIncrement: 0,// set initial value to use in request body
     requestGenerator: function (params, options, client, callback) {
         var latlng = randomize(centerPoint, 26000);
         var id = parseInt(vehicle_count) + parseInt(params.vehicleIncrement);
@@ -39,7 +38,6 @@ var options = {
             "vehicle_id": id + "",
             "user_id": params.vehicleIncrement
         };
-
         params.vehicleIncrement += 1; // increase the requestIndex  value
 
         var message = JSON.stringify(body);
