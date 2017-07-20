@@ -22,8 +22,8 @@ function statusCallback(error, result, latency) {
 
 var options = {
     url: 'http://localhost:3000/updatelocation/:'+vehicle_count,
-    concurrency: 2,
-    maxRequests: 1000,
+    concurrency: 1,
+    maxRequests: 2000,
     method: 'POST',
     contentType: 'application/json',
     headers: {
